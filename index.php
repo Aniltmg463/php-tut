@@ -1,121 +1,75 @@
+<?php
+include 'config/connect.php';
+?>
+
 <!DOCTYPE html>
-<lang="en">
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PHP Internship</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-        <link href="./assets/style.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
-        </script>
-        <script src="./assets/js/jquery-3.7.1.min.js"></script>
-        <style>
-        #cal-display {
-            height: 50px;
-            font-weight: 600;
-            font-size: xx-large;
-            background-color: #fff;
-            box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -webkit-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -moz-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-        }
+<head>
+    <meta charset="UTF-8">
+    <title>Student CRUD App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-        .customBg {
-            background-color: rgb(255, 255, 255);
-            cursor: pointer;
-            border: 1px solid rgb(199, 197, 197);
-            box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -webkit-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -moz-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-        }
+<body class="bg-light text-dark">
 
-        .customBg:hover {
-            background-color: #fff;
-        }
-        </style>
-    </head>
+    <div class="container py-5">
+        <h1 class="text-center fw-bold mb-4">Student Information</h1>
+        <div class="mb-3">
+            <!-- <a href="action/insert.php" class="btn btn-sm btn-success">Add Student</a> -->
+            <a href="view/create.php" class="btn btn-sm btn-success">Add Student</a>
 
-    <body>
-        <div class="container row">
-            <div class="col"></div>
-            <div class="col-6">
-                <div class="card mt-5 shadow" style="width: 18rem;">
-                    <div class="card-body">
-                        <div class="input-group mb-3">
-                            <input id="cal-display" type="text" class="form-control text-end" aria-label="Username"
-                                aria-describedby="basic-addon1">
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(7)" class="col customBg rounded fs-3 p-2">7</div>
-                            <div onclick="itemClick(8)" class="col customBg rounded fs-3 p-2">8</div>
-                            <div onclick="itemClick(9)" class="col customBg rounded fs-3 p-2">9</div>
-                            <div onclick="itemClick('+')" class="col customBg rounded fs-3 p-2">+</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(4)" class="col customBg rounded fs-3 p-2">4</div>
-                            <div onclick="itemClick(5)" class="col customBg rounded fs-3 p-2">5</div>
-                            <div onclick="itemClick(6)" class="col customBg rounded fs-3 p-2">6</div>
-                            <div onclick="itemClick('-')" class="col customBg rounded fs-3 p-2">-</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(1)" class="col customBg rounded fs-3 p-2">1</div>
-                            <div onclick="itemClick(2)" class="col customBg rounded fs-3 p-2">2</div>
-                            <div onclick="itemClick(3)" class="col customBg rounded fs-3 p-2">3</div>
-                            <div onclick="itemClick('*')" class="col customBg rounded fs-6 p-2 pt-3">X</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1 pb-4">
-                            <div onclick="clearInput()" class="col customBg rounded fs-3 p-2 bg-danger text-white">C
-                            </div>
-                            <div onclick="itemClick(0)" class="col customBg rounded fs-3 p-2">0</div>
-                            <div type="submit" id="performOperation" class="col customBg rounded fs-3 p-2">=</div>
-                            <div onclick="itemClick('/')" class="col customBg rounded fs-6 p-2 pt-3">/</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
         </div>
-    </body>
-    <script>
-    $(document).ready(function() {
-        $("#performOperation").click(function(e) {
-            e.preventDefault();
-            var inputData = document.getElementById("cal-display").value;
-            $.ajax({
-                type: "POST",
-                url: "calculation.php",
-                data: {
-                    'data': inputData
-                },
-                beforeSend: function() {
-                    // $(".post_submitting").show().html(
-                    //     "<center><img src='images/loading.gif'/></center>");
-                },
-                success: function(response) {
-                    document.getElementById("cal-display").value = response
-                },
-            });
-            e.preventDefault();
-        });
-    });
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped bg-white shadow rounded">
+                <thead class="table-dark text-white">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Password</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-    const itemClick = (item) => {
-        // alert(item);
-        var input = document.getElementById("cal-display");
-        const previousInput = input.value;
-        if (previousInput.length = 0) {
-            input.value = item;
-        } else {
-            input.value = previousInput + item;
-        }
-    }
+                    <?php
+                    $sql = "SELECT * FROM students";
+                    $result = mysqli_query($conn, $sql);
 
-    function clearInput() {
-        document.getElementById("cal-display").value = "";
-    }
-    </script>
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $id = $row['id'];
+                            $name = $row['name'];
+                            $email = $row['email'];
+                            $mobile = $row['mobile'];
+                            $password = $row['password'];
+                            echo '
+                            <tr>
+                                <td>' . $id . '</td>
+                                <td>' . htmlspecialchars($name) . '</td>
+                                <td>' . htmlspecialchars($email) . '</td>
+                                <td>' . htmlspecialchars($mobile) . '</td>
+                                <td>••••••••</td>
+                                <td>
+                                   <a href="view/edit.php?updateid=' . $id . '" class="btn btn-sm btn-primary">Update</a>
 
-    </html>
+                                    <a href="action/delete.php?deleteid=' . $id . '" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>';
+                        }
+                    } else {
+                        echo '<tr><td colspan="6" class="text-center">No records found.</td></tr>';
+                    }
+                    ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

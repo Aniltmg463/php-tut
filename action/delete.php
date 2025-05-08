@@ -1,5 +1,5 @@
 <?php
-include 'connect.php';
+include '../config/connect.php';
 
 if (isset($_GET['deleteid'])) {
     $id = $_GET['deleteid'];
@@ -7,7 +7,7 @@ if (isset($_GET['deleteid'])) {
     $result = mysqli_query($conn, $sql);
     if ($result) {
         //echo "Data deleted successfully";
-        header('location:display.php');
+        header('location:../index.php');
     } else {
         die(mysqli_error($conn));
     }
