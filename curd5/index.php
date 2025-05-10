@@ -39,7 +39,7 @@ require 'config/connect.php';
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Password</th>
+                        <th>Images</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -54,25 +54,28 @@ require 'config/connect.php';
                             $name = $row['name'];
                             $email = $row['email'];
                             $mobile = $row['mobile'];
+                            $image = $row['image'];
                     ?>
-                    <tr>
-                        <td><?= $id ?></td>
-                        <td><?= $name ?></td>
-                        <td><?= $email ?></td>
-                        <td><?= $mobile ?></td>
-                        <td>••••••••</td>
-                        <td>
-                            <a href="view/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
-                            <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                    <?php
+                            <tr>
+                                <td><?= $id ?></td>
+                                <td><?= $name ?></td>
+                                <td><?= $email ?></td>
+                                <td><?= $mobile ?></td>
+
+                                <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
+                                </td>
+                                <td>
+                                    <a href="view/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
+                                    <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        <?php
                         endwhile;
                     else:
                         ?>
-                    <tr>
-                        <td colspan="6" class="text-center">No records found.</td>
-                    </tr>
+                        <tr>
+                            <td colspan="6" class="text-center">No records found.</td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>

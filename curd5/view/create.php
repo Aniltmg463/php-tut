@@ -14,15 +14,26 @@
                 <div class="card shadow rounded">
                     <div class="card-body">
                         <h3 class="text-center fw-bold mb-4">Add Student</h3>
-                        <form action="../action/insert.php" method="post">
+                        <form action="../action/insert.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name"
                                     class="form-control" required></div>
                             <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email"
                                     class="form-control" required></div>
                             <div class="mb-3"><label class="form-label">Mobile</label><input type="text" name="mobile"
                                     class="form-control" required></div>
-                            <div class="mb-3"><label class="form-label">Password</label><input type="password"
-                                    name="password" class="form-control" required></div>
+                            <div class="mb-3"><label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
+
+                            <!-- <input type="file" name="file" /> -->
+
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Upload Image</label>
+                                <input class="form-control" type="file" name="file" required>
+                            </div>
+
+
+
                             <div class="text-center"><button type="submit" name="submit"
                                     class="btn btn-primary">Submit</button></div>
                         </form>
