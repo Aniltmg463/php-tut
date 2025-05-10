@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2025 at 06:30 AM
+-- Generation Time: May 10, 2025 at 05:14 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,15 +30,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `email`) VALUES
-(1, 'anil22', 'anil@anil');
+INSERT INTO `students` (`id`, `name`, `email`, `image`) VALUES
+(1, 'anil', 'anil@anil', 'OP.jpeg'),
+(3, 'eeee', 'ee@rr', 'OP.jpeg'),
+(5, 'sasd', 'aaaas@qwqw', 'OP.jpeg');
 
 -- --------------------------------------------------------
 
@@ -87,7 +90,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `teachers`

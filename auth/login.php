@@ -14,12 +14,12 @@
         <div class="w-full max-w-xs p-6 bg-white rounded shadow">
             <h2 class="text-xl font-bold text-center text-gray-800 mb-4">Teacher Login</h2>
             <?php if (isset($_SESSION['msg'])): ?>
-            <p class="text-red-500 text-center mb-4">
-                <?php
+                <p class="text-red-500 text-center mb-4">
+                    <?php
                     echo $_SESSION['msg'];
                     unset($_SESSION['msg']); // Clear message after displaying
                     ?>
-            </p>
+                </p>
             <?php endif; ?>
             <form method="POST" action="action/login-process.php">
                 <div class="mb-4">
