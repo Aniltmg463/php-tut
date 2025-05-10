@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             $_SESSION['msg'] = 'Login failed!';
-            header("Location: ../auth/login.php");
+            header("Location: ../login.php");
             exit;
         }
     }
