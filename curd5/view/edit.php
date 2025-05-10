@@ -31,7 +31,7 @@ if (isset($_GET['updateid']) && is_numeric($_GET['updateid'])) {
 <body>
     <div class="container my-5">
         <h2>Update Student Info</h2>
-        <form action="../action/update.php" method="post">
+        <form action="../action/update.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
             <div class="mb-3"><label>Name</label><input type="text" name="name" value="<?php echo $row['name']; ?>"
                     class="form-control"></div>
@@ -41,6 +41,13 @@ if (isset($_GET['updateid']) && is_numeric($_GET['updateid'])) {
                     value="<?php echo $row['mobile']; ?>" class="form-control"></div>
             <div class="mb-3"><label>Password</label><input type="text" name="password"
                     value="<?php echo $row['password']; ?>" class="form-control"></div>
+
+
+            <div class="mb-3">
+                <label for="file" class="form-label">Upload Image</label>
+                <input class="form-control" type="file" name="file">
+            </div>
+
             <button type="submit" name="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
