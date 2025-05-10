@@ -1,5 +1,14 @@
 <?php
-include 'config/connect.php';
+
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header('Location: auth/login.php');
+    exit();
+}
+
+
+require 'config/connect.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +27,13 @@ include 'config/connect.php';
         <h1 class="text-center fw-bold mb-4">Student Information</h1>
         <div class="mb-3">
             <!-- <a href="action/insert.php" class="btn btn-sm btn-success">Add Student</a> -->
+
+            <div class="text-end mb-3">
+                <a href="auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
+            </div>
             <a href="view/create.php" class="btn btn-sm btn-success">Add Student</a>
+
+
 
         </div>
         <div class="table-responsive">
