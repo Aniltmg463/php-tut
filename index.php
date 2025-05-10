@@ -1,121 +1,100 @@
-<!DOCTYPE html>
-<lang="en">
+<?php
+/**
+ * Additional Tips for Students:
+ * Use require vs include: require ensures that a missing file will stop execution—good for critical files.
+ * Always validate and sanitize user input, especially when using query parameters ($_GET, $_POST).
+ * Use session messages for user feedback after actions like create/update/delete.
+ * Organize views and actions in separate folders for maintainability.
+ * Stick to POST requests for data-modifying actions (store, update, delete) to follow REST principles.
+ */
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PHP Internship</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-        <link href="./assets/style.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
-        </script>
-        <script src="./assets/js/jquery-3.7.1.min.js"></script>
-        <style>
-        #cal-display {
-            height: 50px;
-            font-weight: 600;
-            font-size: xx-large;
-            background-color: #fff;
-            box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -webkit-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -moz-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-        }
+// Start the session to manage flash messages and session data
+session_start();
 
-        .customBg {
-            background-color: rgb(255, 255, 255);
-            cursor: pointer;
-            border: 1px solid rgb(199, 197, 197);
-            box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -webkit-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -moz-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-        }
+// Include the database configuration and student-related functions
+require 'config/database.php';
+require 'functions/student.php';
 
-        .customBg:hover {
-            background-color: #fff;
-        }
-        </style>
-    </head>
+// Determine the requested action from the URL, defaulting to 'list' if not provided
+$action = $_GET['action'] ?? 'list';
 
-    <body>
-        <div class="container row">
-            <div class="col"></div>
-            <div class="col-6">
-                <div class="card mt-5 shadow" style="width: 18rem;">
-                    <div class="card-body">
-                        <div class="input-group mb-3">
-                            <input id="cal-display" type="text" class="form-control text-end" aria-label="Username"
-                                aria-describedby="basic-addon1">
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(7)" class="col customBg rounded fs-3 p-2">7</div>
-                            <div onclick="itemClick(8)" class="col customBg rounded fs-3 p-2">8</div>
-                            <div onclick="itemClick(9)" class="col customBg rounded fs-3 p-2">9</div>
-                            <div onclick="itemClick('+')" class="col customBg rounded fs-3 p-2">+</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(4)" class="col customBg rounded fs-3 p-2">4</div>
-                            <div onclick="itemClick(5)" class="col customBg rounded fs-3 p-2">5</div>
-                            <div onclick="itemClick(6)" class="col customBg rounded fs-3 p-2">6</div>
-                            <div onclick="itemClick('-')" class="col customBg rounded fs-3 p-2">-</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(1)" class="col customBg rounded fs-3 p-2">1</div>
-                            <div onclick="itemClick(2)" class="col customBg rounded fs-3 p-2">2</div>
-                            <div onclick="itemClick(3)" class="col customBg rounded fs-3 p-2">3</div>
-                            <div onclick="itemClick('*')" class="col customBg rounded fs-6 p-2 pt-3">X</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1 pb-4">
-                            <div onclick="clearInput()" class="col customBg rounded fs-3 p-2 bg-danger text-white">C
-                            </div>
-                            <div onclick="itemClick(0)" class="col customBg rounded fs-3 p-2">0</div>
-                            <div type="submit" id="performOperation" class="col customBg rounded fs-3 p-2">=</div>
-                            <div onclick="itemClick('/')" class="col customBg rounded fs-6 p-2 pt-3">/</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-    </body>
-    <script>
-    $(document).ready(function() {
-        $("#performOperation").click(function(e) {
-            e.preventDefault();
-            var inputData = document.getElementById("cal-display").value;
-            $.ajax({
-                type: "POST",
-                url: "calculation.php",
-                data: {
-                    'data': inputData
-                },
-                beforeSend: function() {
-                    // $(".post_submitting").show().html(
-                    //     "<center><img src='images/loading.gif'/></center>");
-                },
-                success: function(response) {
-                    document.getElementById("cal-display").value = response
-                },
-            });
-            e.preventDefault();
-        });
-    });
+// Retrieve and sanitize the 'id' from the URL if available
+$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
-    const itemClick = (item) => {
-        // alert(item);
-        var input = document.getElementById("cal-display");
-        const previousInput = input.value;
-        if (previousInput.length = 0) {
-            input.value = item;
+/**
+ * Routing logic based on the 'action' value.
+ * This determines which part of the application the user is trying to access.
+ */
+switch ($action) {
+    // Display the form to create a new student
+    case 'create':
+        require 'views/create.php';
+        break;
+
+    // Handle the form submission for storing a new student
+    case 'store':
+        // Ensure this is a POST request for security reasons
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require 'actions/store.php';
         } else {
-            input.value = previousInput + item;
+            // Redirect back to the index if accessed directly
+            header("Location: index.php");
+            exit;
         }
-    }
+        break;
 
-    function clearInput() {
-        document.getElementById("cal-display").value = "";
-    }
-    </script>
+    // Display the form to edit an existing student
+    case 'edit':
+        if ($id) {
+            require 'views/edit.php';
+        } else {
+            // Set an error message and redirect if ID is invalid
+            $_SESSION['message'] = "Invalid student ID for editing.";
+            header("Location: index.php");
+            exit;
+        }
+        break;
 
-    </html>
+    // Handle the form submission for updating a student
+    case 'update':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id) {
+            require 'actions/update.php';
+        } else {
+            $_SESSION['message'] = "Invalid request for update.";
+            header("Location: index.php");
+            exit;
+        }
+        break;
+
+    // Handle the deletion of a student record
+    case 'delete':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            require 'actions/delete.php';
+        } else {
+            $_SESSION['message'] = "Invalid request for deletion.";
+            header("Location: index.php");
+            exit;
+        }
+        break;
+
+    // Show details of a single student
+    case 'view':
+        if ($id) {
+            require 'views/view.php';
+        } else {
+            $_SESSION['message'] = "Invalid student ID for viewing.";
+            header("Location: index.php");
+            exit;
+        }
+        break;
+
+    // Default case: list all students
+    case 'list':
+        require 'views/index.php';
+        break;
+
+    // If an unknown action is specified, show an error message
+    default:
+        echo '<p>Invalid action specified.</p>';
+        break;
+}
