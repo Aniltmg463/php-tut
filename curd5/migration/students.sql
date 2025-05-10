@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2025 at 11:53 AM
+-- Generation Time: May 10, 2025 at 01:58 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -32,17 +32,18 @@ CREATE TABLE `students` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `mobile` varchar(20) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `email`, `mobile`, `password`) VALUES
-(3, 'akashdddss', 'aa@aa', '123', '123'),
-(4, 'Hari', 'ss@ss', '123', '123'),
-(6, 'shyam', 'ram@eam', '123', '123');
+INSERT INTO `students` (`id`, `name`, `email`, `mobile`, `password`, `image`) VALUES
+(6, 'shyam', 'sam@sam', '123', '123', 'buzz_cutt.jpg'),
+(26, 'samir', 'das@ad', '123333', '123', 'buzz_cutt.jpg'),
+(36, 'pranit', 'pranit@pranit', '123', '123', 'buzz_cutt.jpg');
 
 --
 -- Indexes for dumped tables
@@ -52,7 +53,8 @@ INSERT INTO `students` (`id`, `name`, `email`, `mobile`, `password`) VALUES
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -62,7 +64,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
