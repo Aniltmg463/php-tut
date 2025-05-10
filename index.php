@@ -26,7 +26,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
     <div class="container mx-auto p-4">
         <h1 class="text-xl font-bold mb-4">Students</h1>
         <a href="Action/add.php" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add Student</a>
-        <a href="Entry/logout.php" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">LogOut</a>
+        <a href="auth/logout.php" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">LogOut</a>
 
         <table class="w-full bg-white rounded shadow">
             <thead>
