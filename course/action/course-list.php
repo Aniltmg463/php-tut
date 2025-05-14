@@ -6,21 +6,21 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-require 'config/connect.php';
+require '../../config/connect.php';
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require 'view/layout/header.php'; ?>
+<?php require '../../view/layout/header.php'; ?>
 
 <body class="bg-light text-dark">
 
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">MySchool</a>
+            <a class="navbar-brand" href="../../index.php">MySchool</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,13 +28,15 @@ require 'config/connect.php';
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Student</a>
+                        <a class="nav-link active" aria-current="page" href="../../index.php">Student</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="teacher/teacher.php">Teacher</a>
+                        <a class="nav-link" href="../../teacher/teacher.php">Teacher</a>
                     </li>
+
+
                     <li class="nav-item">
-                        <a class="nav-link" href="course/action/course-list.php">List Course</a>
+                        <a class="nav-link" href="#">List Course</a>
                     </li>
 
                     <li class="nav-item">
@@ -45,17 +47,15 @@ require 'config/connect.php';
         </div>
     </nav>
 
-
-
     <div class="container py-5">
-        <h1 class="text-center fw-bold mb-4">Student Information</h1>
+        <h1 class="text-center fw-bold mb-4">Course Information</h1>
 
         <div class="text-end mb-3">
             <a href="auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
         </div>
 
         <div class="mb-3">
-            <a href="view/create.php" class="btn btn-sm btn-success">Add Student</a>
+            <a href="../create-courses.php" class="btn btn-sm btn-success">Add Course</a>
         </div>
 
         <div class="table-responsive">
@@ -64,36 +64,35 @@ require 'config/connect.php';
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Images</th>
+                        <th>Duration</th>
                         <th>Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT * FROM students";
+                    $sql = "SELECT * FROM course";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result && mysqli_num_rows($result) > 0):
                         while ($row = mysqli_fetch_assoc($result)):
                             $id = $row['id'];
                             $name = $row['name'];
-                            $email = $row['email'];
-                            $mobile = $row['mobile'];
-                            $image = $row['image'];
+                            $duration = $row['duration'];
                     ?>
                             <tr>
                                 <td><?= $id ?></td>
                                 <td><?= $name ?></td>
-                                <td><?= $email ?></td>
-                                <td><?= $mobile ?></td>
+                                <td><?= $duration ?></td>
 
-                                <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
                                 </td>
                                 <td>
-                                    <a href="view/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
-                                    <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
+                                    <!-- <a href="view/edit-course.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a> -->
+                                    <a href="../../course/edit-course.php?updateid=<?= $id ?>"
+                                        class="btn btn-sm btn-primary">Update</a>
+
+                                    <a href="../../course/action/delete-course.php?deleteid=<?= $id ?>"
+                                        class="btn btn-sm btn-danger">Delete</a>
                                 </td>
                             </tr>
                         <?php
