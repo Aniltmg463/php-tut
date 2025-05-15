@@ -1,26 +1,5 @@
 <?php
 session_start();
-require 'core/db.php'; // Make sure this sets $connection
-
-// Search logic
-$searchResults = [];
-if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
-    $keyword = trim($_GET['keyword']);
-    $keyword = $connection->real_escape_string($keyword);
-
-    $sql = "SELECT * FROM users WHERE name LIKE ? OR email LIKE ?";
-    $stmt = $connection->prepare($sql);
-    $searchTerm = "%{$keyword}%";
-    $stmt->bind_param('ss', $searchTerm, $searchTerm);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        $searchResults[] = $row;
-    }
-
-    $stmt->close();
-}
 ?>
 
 <!DOCTYPE html>
@@ -38,11 +17,11 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+
             <!-- 🔍 Search Bar -->
-            <form class="d-flex" role="search" action="index.php" method="GET">
+            <form class="d-flex" role="search" action="courses/actions/search.php" method="GET">
                 <input class="form-control me-2" type="search" name="keyword" placeholder="Search..."
-                    aria-label="Search"
-                    value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    aria-label="Search">
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
 
@@ -69,40 +48,22 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
         <h1 class="text-center fw-bold mb-4">Welcome to the Application</h1>
 
         <?php if (isset($_SESSION['user'])): ?>
-            <div class="text-end mb-3">
-                <p class="fw-semibold">Hello, <span
-                        class="text-primary"><?= htmlspecialchars($_SESSION['user']['name']) ?></span></p>
-                <a href="auth/logout.php" class="btn btn-sm btn-warning">Logout</a>
-            </div>
+        <div class="text-end mb-3">
+            <p class="fw-semibold">Hello, <span
+                    class="text-primary"><?= htmlspecialchars($_SESSION['user']['name']) ?></span></p>
+            <a href="auth/logout.php" class="btn btn-sm btn-warning">Logout</a>
+        </div>
         <?php else: ?>
-            <div class="text-center mb-4">
-                <a href="auth/login.php" class="btn btn-primary me-2">Login</a>
-                <a href="auth/register.php" class="btn btn-success">Register</a>
-            </div>
+        <div class="text-center mb-4">
+            <a href="auth/login.php" class="btn btn-primary me-2">Login</a>
+            <a href="auth/register.php" class="btn btn-success">Register</a>
+        </div>
         <?php endif; ?>
 
         <div class="d-grid gap-3 col-6 mx-auto">
             <a href="courses/index.php" class="btn btn-outline-primary">📘 View Courses</a>
             <a href="users/index.php" class="btn btn-outline-success">👥 View Users</a>
         </div>
-
-        <!-- 🔍 Search Results -->
-        <?php if (!empty($searchResults)): ?>
-            <div class="mt-5">
-                <h3 class="text-center">Search Results</h3>
-                <hr>
-                <?php foreach ($searchResults as $user): ?>
-                    <div class="border rounded p-3 mb-3 shadow-sm bg-white">
-                        <strong>Name:</strong> <?= htmlspecialchars($user['name']) ?><br>
-                        <strong>Email:</strong> <?= htmlspecialchars($user['email']) ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php elseif (isset($_GET['keyword'])): ?>
-            <div class="mt-5 text-center text-muted">
-                <p>No users found for "<strong><?= htmlspecialchars($_GET['keyword']) ?></strong>".</p>
-            </div>
-        <?php endif; ?>
     </div>
 
 </body>
