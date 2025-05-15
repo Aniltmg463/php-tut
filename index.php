@@ -1,121 +1,110 @@
+<?php
+session_start();
+require 'core/db.php'; // Make sure this sets $connection
+
+// Search logic
+$searchResults = [];
+if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
+    $keyword = trim($_GET['keyword']);
+    $keyword = $connection->real_escape_string($keyword);
+
+    $sql = "SELECT * FROM users WHERE name LIKE ? OR email LIKE ?";
+    $stmt = $connection->prepare($sql);
+    $searchTerm = "%{$keyword}%";
+    $stmt->bind_param('ss', $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $searchResults[] = $row;
+    }
+
+    $stmt->close();
+}
+?>
+
 <!DOCTYPE html>
-<lang="en">
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PHP Internship</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-        <link href="./assets/style.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
-        </script>
-        <script src="./assets/js/jquery-3.7.1.min.js"></script>
-        <style>
-        #cal-display {
-            height: 50px;
-            font-weight: 600;
-            font-size: xx-large;
-            background-color: #fff;
-            box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -webkit-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-            -moz-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.75) inset;
-        }
+<?php require 'users/layout/header.php'; ?>
 
-        .customBg {
-            background-color: rgb(255, 255, 255);
-            cursor: pointer;
-            border: 1px solid rgb(199, 197, 197);
-            box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -webkit-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-            -moz-box-shadow: 0px -2px 11px 4px rgba(0, 0, 0, 0.14) inset;
-        }
+<body class="bg-light text-dark">
 
-        .customBg:hover {
-            background-color: #fff;
-        }
-        </style>
-    </head>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">MySchool</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <body>
-        <div class="container row">
-            <div class="col"></div>
-            <div class="col-6">
-                <div class="card mt-5 shadow" style="width: 18rem;">
-                    <div class="card-body">
-                        <div class="input-group mb-3">
-                            <input id="cal-display" type="text" class="form-control text-end" aria-label="Username"
-                                aria-describedby="basic-addon1">
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(7)" class="col customBg rounded fs-3 p-2">7</div>
-                            <div onclick="itemClick(8)" class="col customBg rounded fs-3 p-2">8</div>
-                            <div onclick="itemClick(9)" class="col customBg rounded fs-3 p-2">9</div>
-                            <div onclick="itemClick('+')" class="col customBg rounded fs-3 p-2">+</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(4)" class="col customBg rounded fs-3 p-2">4</div>
-                            <div onclick="itemClick(5)" class="col customBg rounded fs-3 p-2">5</div>
-                            <div onclick="itemClick(6)" class="col customBg rounded fs-3 p-2">6</div>
-                            <div onclick="itemClick('-')" class="col customBg rounded fs-3 p-2">-</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1">
-                            <div onclick="itemClick(1)" class="col customBg rounded fs-3 p-2">1</div>
-                            <div onclick="itemClick(2)" class="col customBg rounded fs-3 p-2">2</div>
-                            <div onclick="itemClick(3)" class="col customBg rounded fs-3 p-2">3</div>
-                            <div onclick="itemClick('*')" class="col customBg rounded fs-6 p-2 pt-3">X</div>
-                        </div>
-                        <div class="row gap-2 text-center px-3 py-1 pb-4">
-                            <div onclick="clearInput()" class="col customBg rounded fs-3 p-2 bg-danger text-white">C
-                            </div>
-                            <div onclick="itemClick(0)" class="col customBg rounded fs-3 p-2">0</div>
-                            <div type="submit" id="performOperation" class="col customBg rounded fs-3 p-2">=</div>
-                            <div onclick="itemClick('/')" class="col customBg rounded fs-6 p-2 pt-3">/</div>
-                        </div>
-                    </div>
-                </div>
+            <!-- 🔍 Search Bar -->
+            <form class="d-flex" role="search" action="index.php" method="GET">
+                <input class="form-control me-2" type="search" name="keyword" placeholder="Search..."
+                    aria-label="Search"
+                    value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.php">Student</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Teacher</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses/index.php">List Course</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Fees</a>
+                    </li>
+                </ul>
             </div>
-            <div class="col"></div>
         </div>
-    </body>
-    <script>
-    $(document).ready(function() {
-        $("#performOperation").click(function(e) {
-            e.preventDefault();
-            var inputData = document.getElementById("cal-display").value;
-            $.ajax({
-                type: "POST",
-                url: "calculation.php",
-                data: {
-                    'data': inputData
-                },
-                beforeSend: function() {
-                    // $(".post_submitting").show().html(
-                    //     "<center><img src='images/loading.gif'/></center>");
-                },
-                success: function(response) {
-                    document.getElementById("cal-display").value = response
-                },
-            });
-            e.preventDefault();
-        });
-    });
+    </nav>
 
-    const itemClick = (item) => {
-        // alert(item);
-        var input = document.getElementById("cal-display");
-        const previousInput = input.value;
-        if (previousInput.length = 0) {
-            input.value = item;
-        } else {
-            input.value = previousInput + item;
-        }
-    }
+    <div class="container py-5">
+        <h1 class="text-center fw-bold mb-4">Welcome to the Application</h1>
 
-    function clearInput() {
-        document.getElementById("cal-display").value = "";
-    }
-    </script>
+        <?php if (isset($_SESSION['user'])): ?>
+            <div class="text-end mb-3">
+                <p class="fw-semibold">Hello, <span
+                        class="text-primary"><?= htmlspecialchars($_SESSION['user']['name']) ?></span></p>
+                <a href="auth/logout.php" class="btn btn-sm btn-warning">Logout</a>
+            </div>
+        <?php else: ?>
+            <div class="text-center mb-4">
+                <a href="auth/login.php" class="btn btn-primary me-2">Login</a>
+                <a href="auth/register.php" class="btn btn-success">Register</a>
+            </div>
+        <?php endif; ?>
 
-    </html>
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <a href="courses/index.php" class="btn btn-outline-primary">📘 View Courses</a>
+            <a href="users/index.php" class="btn btn-outline-success">👥 View Users</a>
+        </div>
+
+        <!-- 🔍 Search Results -->
+        <?php if (!empty($searchResults)): ?>
+            <div class="mt-5">
+                <h3 class="text-center">Search Results</h3>
+                <hr>
+                <?php foreach ($searchResults as $user): ?>
+                    <div class="border rounded p-3 mb-3 shadow-sm bg-white">
+                        <strong>Name:</strong> <?= htmlspecialchars($user['name']) ?><br>
+                        <strong>Email:</strong> <?= htmlspecialchars($user['email']) ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php elseif (isset($_GET['keyword'])): ?>
+            <div class="mt-5 text-center text-muted">
+                <p>No users found for "<strong><?= htmlspecialchars($_GET['keyword']) ?></strong>".</p>
+            </div>
+        <?php endif; ?>
+    </div>
+
+</body>
+
+</html>
