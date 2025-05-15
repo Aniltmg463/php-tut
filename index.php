@@ -19,7 +19,7 @@ session_start();
 
 
             <!-- 🔍 Search Bar -->
-            <form class="d-flex" role="search" action="courses/actions/search.php" method="GET">
+            <form class="d-flex" role="search" action="users/actions/search.php" method="GET">
                 <input class="form-control me-2" type="search" name="keyword" placeholder="Search..."
                     aria-label="Search">
                 <button class="btn btn-outline-light" type="submit">Search</button>
@@ -48,16 +48,16 @@ session_start();
         <h1 class="text-center fw-bold mb-4">Welcome to the Application</h1>
 
         <?php if (isset($_SESSION['user'])): ?>
-        <div class="text-end mb-3">
-            <p class="fw-semibold">Hello, <span
-                    class="text-primary"><?= htmlspecialchars($_SESSION['user']['name']) ?></span></p>
-            <a href="auth/logout.php" class="btn btn-sm btn-warning">Logout</a>
-        </div>
+            <div class="text-end mb-3">
+                <p class="fw-semibold">Hello, <span
+                        class="text-primary"><?= htmlspecialchars($_SESSION['user']['name']) ?></span></p>
+                <a href="auth/logout.php" class="btn btn-sm btn-warning">Logout</a>
+            </div>
         <?php else: ?>
-        <div class="text-center mb-4">
-            <a href="auth/login.php" class="btn btn-primary me-2">Login</a>
-            <a href="auth/register.php" class="btn btn-success">Register</a>
-        </div>
+            <div class="text-center mb-4">
+                <a href="auth/login.php" class="btn btn-primary me-2">Login</a>
+                <a href="auth/register.php" class="btn btn-success">Register</a>
+            </div>
         <?php endif; ?>
 
         <div class="d-grid gap-3 col-6 mx-auto">

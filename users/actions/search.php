@@ -8,10 +8,10 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
     $keyword = trim($_GET['keyword']);
     $keyword = $connection->real_escape_string($keyword);
 
-    $sql = "SELECT * FROM courses WHERE name LIKE ?";
+    $sql = "SELECT * FROM users WHERE name LIKE ? OR email LIKE ?";
     $stmt = $connection->prepare($sql);
     $searchTerm = "%{$keyword}%";
-    $stmt->bind_param('s', $searchTerm);
+    $stmt->bind_param('ss', $searchTerm, $searchTerm);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -88,7 +88,7 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <!-- <th>Email</th> -->
+                            <th>Email</th>
                             <!-- <th class="text-center">Actions</th> -->
                         </tr>
                     </thead>
@@ -97,7 +97,7 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                             <tr>
                                 <td class="text-center"><?= $user['id'] ?></td>
                                 <td><?= htmlspecialchars($user['name']) ?></td>
-                                <!-- <td><?= htmlspecialchars($user['email']) ?></td> -->
+                                <td><?= htmlspecialchars($user['email']) ?></td>
                                 <!-- <td class="text-center">
                                 <a href="users/edit.php?id=<?= $user['id'] ?>"
                                     class="btn btn-sm btn-primary me-1">Edit</a>
