@@ -26,6 +26,16 @@ $courses = getCourses();
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+
+            <!-- 🔍 Search Bar -->
+            <form class="d-flex" role="search" action="actions/search.php" method="GET">
+                <input class="form-control me-2" type="search" name="keyword" placeholder="Search..."
+                    aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
