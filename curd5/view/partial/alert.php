@@ -1,8 +1,13 @@
 <?php
-if (isset($_SESSION['alert'])) {
-    $alertType = $_SESSION['alert']['type'] === 'success' ? 'alert-success' : 'alert-danger';
-    echo '<div class="alert ' . $alertType . ' alert-dismissible fade show" role="alert">';
-    echo '<p class="mb-0">' . htmlspecialchars($_SESSION['alert']['message']) . '</p>';
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    echo '</div>';
-}
+if (isset($_SESSION['message'])) :
+?>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong></strong> <?= $_SESSION['message']; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+<?php
+    unset($_SESSION['message']);
+endif;
+?>
