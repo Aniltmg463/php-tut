@@ -4,33 +4,22 @@ require '../../config/connect.php'; // Make sure this sets $connection
 
 // Search logic
 $searchResults = [];
-$message = "";
-
-if (isset($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
     $keyword = trim($_GET['keyword']);
+    $keyword = $conn->real_escape_string($keyword);
 
-    if ($keyword === "") {
-        $message = "Please enter a keyword to search.";
-    } else {
-        $keyword = $conn->real_escape_string($keyword);
+    $sql = "SELECT * FROM students WHERE name LIKE ? OR email LIKE ?";
+    $stmt = $conn->prepare($sql);
+    $searchTerm = "%{$keyword}%";
+    $stmt->bind_param('ss', $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        $sql = "SELECT * FROM students WHERE name LIKE ? OR email LIKE ?";
-        $stmt = $conn->prepare($sql);
-        $searchTerm = "%{$keyword}%";
-        $stmt->bind_param('ss', $searchTerm, $searchTerm);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        while ($row = $result->fetch_assoc()) {
-            $searchResults[] = $row;
-        }
-
-        if (empty($searchResults)) {
-            $message = "No matching results found.";
-        }
-
-        $stmt->close();
+    while ($row = $result->fetch_assoc()) {
+        $searchResults[] = $row;
     }
+
+    $stmt->close();
 }
 ?>
 
@@ -56,18 +45,6 @@ if (isset($_GET['keyword'])) {
                     value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
-
-            <?php if (!empty($message)) : ?>
-                <p style="color:red;"><?php echo htmlspecialchars($message); ?></p>
-            <?php endif; ?>
-
-            <?php if (!empty($searchResults)) : ?>
-                <ul>
-                    <?php foreach ($searchResults as $row) : ?>
-                        <li><?php echo htmlspecialchars($row['name']) . " (" . htmlspecialchars($row['email']) . ")"; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
 
 
             <div class="collapse navbar-collapse" id="navbarNav">
