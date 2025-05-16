@@ -58,6 +58,9 @@ require 'config/connect.php';
 
 
     <div class="container py-5">
+        <!-- Alert Message -->
+        <?php require 'user/partial/alert.php'; ?>
+
         <h1 class="text-center fw-bold mb-4">Student Information</h1>
 
         <div class="text-end mb-3">
@@ -81,6 +84,8 @@ require 'config/connect.php';
                     </tr>
                 </thead>
                 <tbody>
+
+
                     <?php
                     $sql = "SELECT * FROM students";
                     $result = mysqli_query($conn, $sql);
@@ -93,27 +98,27 @@ require 'config/connect.php';
                             $mobile = $row['mobile'];
                             $image = $row['image'];
                     ?>
-                            <tr>
-                                <td><?= $id ?></td>
-                                <td><?= $name ?></td>
-                                <td><?= $email ?></td>
-                                <td><?= $mobile ?></td>
+                    <tr>
+                        <td><?= $id ?></td>
+                        <td><?= $name ?></td>
+                        <td><?= $email ?></td>
+                        <td><?= $mobile ?></td>
 
-                                <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
-                                </td>
-                                <td>
-                                    <a href="user/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
-                                    <a href="user/action/delete.php?deleteid=<?= $id ?>"
-                                        class="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                        <?php
+                        <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
+                        </td>
+                        <td>
+                            <a href="user/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
+                            <a href="user/action/delete.php?deleteid=<?= $id ?>"
+                                class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    <?php
                         endwhile;
                     else:
                         ?>
-                        <tr>
-                            <td colspan="6" class="text-center">No records found.</td>
-                        </tr>
+                    <tr>
+                        <td colspan="6" class="text-center">No records found.</td>
+                    </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
