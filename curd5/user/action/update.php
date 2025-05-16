@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
         $file_name = $_FILES['file']['name'];
         $file_temp = $_FILES['file']['tmp_name'];
 
-        if (move_uploaded_file($file_temp, "../upload-images/" . $file_name)) {
+        if (move_uploaded_file($file_temp, "../../upload-images/" . $file_name)) {
             echo "<div class='alert alert-success'>File uploaded successfully!</div>";
         } else {
             echo "<div class='alert alert-danger'>File upload failed.</div>";
