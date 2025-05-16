@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
 
     if ($stmt->execute()) {
-        header("Location: ../../index.php");
+        header("Location: ../index.php");
         exit();
     } else {
         echo "Update failed: " . $stmt->error;

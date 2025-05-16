@@ -14,7 +14,7 @@
                 <div class="card shadow rounded">
                     <div class="card-body">
                         <h3 class="text-center fw-bold mb-4">Add Course</h3>
-                        <form action="action/insert-course.php" method="post" enctype="multipart/form-data">
+                        <form action="action/insert.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name"
                                     class="form-control" required></div>
                             <div class="mb-3">

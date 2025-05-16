@@ -3,7 +3,7 @@ include '../config/connect.php';
 
 if (isset($_GET['updateid']) && is_numeric($_GET['updateid'])) {
     $id = $_GET['updateid'];
-    $stmt = $conn->prepare("SELECT * FROM course WHERE id = ?");
+    $stmt = $conn->prepare("SELECT * FROM students WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -31,13 +31,22 @@ if (isset($_GET['updateid']) && is_numeric($_GET['updateid'])) {
 <body>
     <div class="container my-5">
         <h2>Update Student Info</h2>
-        <form action="action/update-course.php" method="post">
+        <form action="action/update.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
             <div class="mb-3"><label>Name</label><input type="text" name="name" value="<?php echo $row['name']; ?>"
                     class="form-control"></div>
-            <div class="mb-3"><label>Duration</label><input type="text" name="duration"
-                    value="<?php echo $row['duration']; ?>" class="form-control"></div>
+            <div class="mb-3"><label>Email</label><input type="email" name="email" value="<?php echo $row['email']; ?>"
+                    class="form-control"></div>
+            <div class="mb-3"><label>Mobile</label><input type="text" name="mobile"
+                    value="<?php echo $row['mobile']; ?>" class="form-control"></div>
+            <div class="mb-3"><label>Password</label><input type="text" name="password"
+                    value="<?php echo $row['password']; ?>" class="form-control"></div>
 
+
+            <div class="mb-3">
+                <label for="file" class="form-label">Upload Image</label>
+                <input class="form-control" type="file" name="file">
+            </div>
 
             <button type="submit" name="submit" class="btn btn-primary">Update</button>
         </form>

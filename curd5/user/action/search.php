@@ -1,38 +1,49 @@
 <?php
 session_start();
-require '../config/connect.php'; // Make sure this sets $connection
+require '../../config/connect.php'; // Make sure this sets $connection
 
 // Search logic
 $searchResults = [];
-if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
+$message = "";
+
+if (isset($_GET['keyword'])) {
     $keyword = trim($_GET['keyword']);
-    $keyword = $conn->real_escape_string($keyword);
 
-    $sql = "SELECT * FROM students WHERE name LIKE ? OR email LIKE ?";
-    $stmt = $conn->prepare($sql);
-    $searchTerm = "%{$keyword}%";
-    $stmt->bind_param('ss', $searchTerm, $searchTerm);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($keyword === "") {
+        $message = "Please enter a keyword to search.";
+    } else {
+        $keyword = $conn->real_escape_string($keyword);
 
-    while ($row = $result->fetch_assoc()) {
-        $searchResults[] = $row;
+        $sql = "SELECT * FROM students WHERE name LIKE ? OR email LIKE ?";
+        $stmt = $conn->prepare($sql);
+        $searchTerm = "%{$keyword}%";
+        $stmt->bind_param('ss', $searchTerm, $searchTerm);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while ($row = $result->fetch_assoc()) {
+            $searchResults[] = $row;
+        }
+
+        if (empty($searchResults)) {
+            $message = "No matching results found.";
+        }
+
+        $stmt->close();
     }
-
-    $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require '../view/layout/header.php'; ?>
+<?php require '../layout/header.php'; ?>
 
 <body class="bg-light text-dark">
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow">
         <div class="container-fluid">
-            <a class="navbar-brand" href="../index.php">MySchool</a>
+            <a class="navbar-brand" href="../../index.php">MySchool</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -45,6 +56,19 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                     value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
+
+            <?php if (!empty($message)) : ?>
+                <p style="color:red;"><?php echo htmlspecialchars($message); ?></p>
+            <?php endif; ?>
+
+            <?php if (!empty($searchResults)) : ?>
+                <ul>
+                    <?php foreach ($searchResults as $row) : ?>
+                        <li><?php echo htmlspecialchars($row['name']) . " (" . htmlspecialchars($row['email']) . ")"; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">

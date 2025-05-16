@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config/connect.php';
+include '../../config/connect.php';
 
 if (isset($_POST['submit'])) {
     $name     = trim($_POST['name']);
@@ -18,14 +18,14 @@ if (isset($_POST['submit'])) {
     // Validate required fields
     if (empty($name) || empty($email) || empty($mobile) || empty($password)) {
         $_SESSION['create-err'] = "All fields are required.";
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
 
     // Check if file is uploaded
     if (!isset($_FILES['file']) || $_FILES['file']['error'] !== 0) {
         $_SESSION['create-err'] = "Error uploading file.";
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
 
@@ -36,16 +36,16 @@ if (isset($_POST['submit'])) {
 
     if (!in_array($file_ext, $allowed_ext)) {
         $_SESSION['create-err'] = "Invalid file type. Allowed types: PNG, JPG, JPEG, GIF.";
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
 
     $new_file_name = uniqid("IMG_", true) . '.' . $file_ext;
-    $destination = '../upload-images/' . $new_file_name;
+    $destination = '../../upload-images/' . $new_file_name;
 
     if (!move_uploaded_file($file_tmp, $destination)) {
         $_SESSION['create-err'] = "Failed to move uploaded file.";
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
 
@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
     $stmt->store_result();
     if ($stmt->num_rows > 0) {
         $_SESSION['create-err'] = "Email already exists.";
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
     }
     $stmt->close();
 
@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
     if ($stmt->num_rows > 0) {
         $_SESSION['create-err'] = "Phone already exists.";
         $stmt->close();
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
     $stmt->close();
@@ -82,15 +82,15 @@ if (isset($_POST['submit'])) {
 
     if ($stmt->execute()) {
         unset($_SESSION['old']);
-        header("Location: ../index.php");
+        header("Location: ../../index.php");
         exit;
     } else {
         $_SESSION['create-err'] = "Insert failed: " . $stmt->error;
-        header("Location: ../view/create.php");
+        header("Location: ../create.php");
         exit;
     }
 } else {
     $_SESSION['create-err'] = "Invalid form submission.";
-    header("Location: ../view/create.php");
+    header("Location: ../create.php");
     exit;
 }

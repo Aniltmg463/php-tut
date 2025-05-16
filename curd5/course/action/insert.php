@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
 
     $sql = "INSERT INTO course (name, duration) VALUES ('$name','$duration')";
     if ($conn->query($sql) === TRUE) {
-        header("Location: course-list.php");
+        header("Location: ../index.php");
         exit();
     } else {
         echo "Error: " . $conn->error;

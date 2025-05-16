@@ -18,13 +18,13 @@
                         <h3 class="text-center fw-bold mb-4">Add Student</h3>
 
                         <?php if (isset($_SESSION['create-err'])): ?>
-                        <p class="text-danger text-center mb-4">
-                            <?= $_SESSION['create-err'];
+                            <p class="text-danger text-center mb-4">
+                                <?= $_SESSION['create-err'];
                                 unset($_SESSION['create-err']); ?>
-                        </p>
+                            </p>
                         <?php endif; ?>
 
-                        <form action="../action/insert.php" method="post" enctype="multipart/form-data">
+                        <form action="action/insert.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="name" class="form-control"

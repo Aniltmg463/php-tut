@@ -12,7 +12,7 @@ require '../config/connect.php';
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require '../view/layout/header.php'; ?>
+<?php require '../user/layout/header.php'; ?>
 
 <body class="bg-light text-dark">
 
@@ -34,7 +34,7 @@ require '../config/connect.php';
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="../course/action/course-list.php">List Course</a>
+                        <a class="nav-link" href="../course/index.php">Courses</a>
                     </li>
 
                     <li class="nav-item">
@@ -53,7 +53,7 @@ require '../config/connect.php';
         </div>
 
         <div class="mb-3">
-            <a href="../auth/signup.php" class="btn btn-sm btn-success">Add Teacher</a>
+            <a href="create.php" class="btn btn-sm btn-success">Add Teacher</a>
         </div>
 
         <div class="table-responsive">
@@ -85,11 +85,9 @@ require '../config/connect.php';
                                 </td>
                                 <td>
                                     <!-- <a href="view/edit-course.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a> -->
-                                    <a href="../teacher/edit-teacher.php?updateid=<?= $id ?>"
-                                        class="btn btn-sm btn-primary">Update</a>
+                                    <a href="edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
 
-                                    <a href="../teacher/action/delete-teacher.php?deleteid=<?= $id ?>"
-                                        class="btn btn-sm btn-danger">Delete</a>
+                                    <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
                                 </td>
                             </tr>
                         <?php

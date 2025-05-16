@@ -31,7 +31,7 @@ if (isset($_GET['updateid']) && is_numeric($_GET['updateid'])) {
 <body>
     <div class="container my-5">
         <h2>Update Teacher Info</h2>
-        <form action="action/update-teacher.php" method="post">
+        <form action="action/update.php" method="post">
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
             <div class="mb-3"><label>Name</label><input type="text" name="name" value="<?php echo $row['name']; ?>"
                     class="form-control"></div>

@@ -1,5 +1,5 @@
 <?php
-include '../config/connect.php';
+include '../../config/connect.php';
 
 if (isset($_POST['submit'])) {
     $id       = $_POST['id'];
@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     }
 
     if ($stmt->execute()) {
-        header("Location: ../index.php");
+        header("Location: ../../index.php");
         exit();
     } else {
         echo "Update failed: " . $stmt->error;

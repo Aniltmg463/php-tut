@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $stmt->bind_param("ssi", $name, $email,  $id);
 
     if ($stmt->execute()) {
-        header("Location:../teacher.php");
+        header("Location:../index.php");
         exit();
     } else {
         echo "Update failed: " . $stmt->error;
