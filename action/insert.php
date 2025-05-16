@@ -1,55 +1,96 @@
 <?php
+session_start();
 include '../config/connect.php';
 
 if (isset($_POST['submit'])) {
-    $name     = $_POST['name'];
-    $email    = $_POST['email'];
-    $mobile   = $_POST['mobile'];
+    $name     = trim($_POST['name']);
+    $email    = trim($_POST['email']);
+    $mobile   = trim($_POST['mobile']);
     $password = $_POST['password'];
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Store old inputs for repopulating form on error (excluding password)
+    $_SESSION['old'] = [
+        'name' => $name,
+        'email' => $email,
+        'mobile' => $mobile
+    ];
 
-    // Validate form data
-    if (!$name || !$email || !$password) {
-        die("Name, Email, and Password are required.");
+    // Validate required fields
+    if (empty($name) || empty($email) || empty($mobile) || empty($password)) {
+        $_SESSION['create-err'] = "All fields are required.";
+        header("Location: ../view/create.php");
+        exit;
     }
 
-    // File handling
-    $file_name  = $_FILES['file']['name'];
-    $file_temp  = $_FILES['file']['tmp_name'];
-    $file_error = $_FILES['file']['error']; //FIXED: was $file['eror'] which is undefined
+    // Check if file is uploaded
+    if (!isset($_FILES['file']) || $_FILES['file']['error'] !== 0) {
+        $_SESSION['create-err'] = "Error uploading file.";
+        header("Location: ../view/create.php");
+        exit;
+    }
 
-    $file_extension = explode('.', $file_name);
-    $file_extension_check = strtolower(end($file_extension));
-    $valid_file_extensions = ['png', 'jpg', 'jpeg', 'gif'];
+    $file_name = $_FILES['file']['name'];
+    $file_tmp = $_FILES['file']['tmp_name'];
+    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+    $allowed_ext = ['png', 'jpg', 'jpeg', 'gif'];
 
-    if ($file_error === 0) {
-        if (in_array($file_extension_check, $valid_file_extensions)) {
-            $new_file_name = uniqid() . '.' . $file_extension_check;
-            $destination = '../upload-images/' . $new_file_name;
+    if (!in_array($file_ext, $allowed_ext)) {
+        $_SESSION['create-err'] = "Invalid file type. Allowed types: PNG, JPG, JPEG, GIF.";
+        header("Location: ../view/create.php");
+        exit;
+    }
 
-            move_uploaded_file($file_temp, $destination);
-        } else {
-            die("Invalid file type. Only PNG, JPG, JPEG, and GIF are allowed.");
-        }
-    } else {
-        die("Error uploading file.");
+    $new_file_name = uniqid("IMG_", true) . '.' . $file_ext;
+    $destination = '../upload-images/' . $new_file_name;
+
+    if (!move_uploaded_file($file_tmp, $destination)) {
+        $_SESSION['create-err'] = "Failed to move uploaded file.";
+        header("Location: ../view/create.php");
+        exit;
     }
 
     // Check for duplicate email
-    $sql = "SELECT * FROM students WHERE email='$email'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        die("Email already exists.");
+    $stmt = $conn->prepare("SELECT id FROM students WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+        $_SESSION['create-err'] = "Email already exists.";
+        header("Location: ../view/create.php");
     }
+    $stmt->close();
 
-    // Insert new student
-    $sql = "INSERT INTO students (name, email, mobile, password, image) 
-            VALUES ('$name','$email','$mobile','$hashedPassword','$new_file_name')";
-    if ($conn->query($sql) === TRUE) {
-        header("Location: ../index.php");
-        exit();
-    } else {
-        echo "Error: " . $conn->error;
+    // Check for duplicate mobile
+    $stmt = $conn->prepare("SELECT id FROM students WHERE mobile = ?");
+    $stmt->bind_param("s", $mobile);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+        $_SESSION['create-err'] = "Phone already exists.";
+        $stmt->close();
+        header("Location: ../view/create.php");
+        exit;
     }
+    $stmt->close();
+
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert into database
+    $stmt = $conn->prepare("INSERT INTO students (name, email, mobile, password, image) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $name, $email, $mobile, $hashedPassword, $new_file_name);
+
+    if ($stmt->execute()) {
+        unset($_SESSION['old']);
+        header("Location: ../index.php");
+        exit;
+    } else {
+        $_SESSION['create-err'] = "Insert failed: " . $stmt->error;
+        header("Location: ../view/create.php");
+        exit;
+    }
+} else {
+    $_SESSION['create-err'] = "Invalid form submission.";
+    header("Location: ../view/create.php");
+    exit;
 }
