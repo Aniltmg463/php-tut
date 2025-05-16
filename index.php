@@ -13,7 +13,7 @@ require 'config/connect.php';
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require 'view/layout/header.php'; ?>
+<?php require 'user/layout/header.php'; ?>
 
 <body class="bg-light text-dark">
 
@@ -28,7 +28,7 @@ require 'config/connect.php';
 
 
             <!-- 🔍 Search Bar -->
-            <form class="d-flex" role="search" action="action/search.php" method="GET">
+            <form class="d-flex" role="search" action="user/action/search.php" method="GET">
                 <input class="form-control me-2" type="search" name="keyword" placeholder="Search..."
                     aria-label="Search">
                 <button class="btn btn-outline-light" type="submit">Search</button>
@@ -44,7 +44,7 @@ require 'config/connect.php';
                         <a class="nav-link" href="teacher/index.php">Teacher</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="course/action/course-list.php">List Course</a>
+                        <a class="nav-link" href="course/index.php">Courses</a>
                     </li>
 
                     <li class="nav-item">
@@ -65,7 +65,7 @@ require 'config/connect.php';
         </div>
 
         <div class="mb-3">
-            <a href="view/create.php" class="btn btn-sm btn-success">Add Student</a>
+            <a href="user/create.php" class="btn btn-sm btn-success">Add Student</a>
         </div>
 
         <div class="table-responsive">
@@ -93,26 +93,27 @@ require 'config/connect.php';
                             $mobile = $row['mobile'];
                             $image = $row['image'];
                     ?>
-                    <tr>
-                        <td><?= $id ?></td>
-                        <td><?= $name ?></td>
-                        <td><?= $email ?></td>
-                        <td><?= $mobile ?></td>
+                            <tr>
+                                <td><?= $id ?></td>
+                                <td><?= $name ?></td>
+                                <td><?= $email ?></td>
+                                <td><?= $mobile ?></td>
 
-                        <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
-                        </td>
-                        <td>
-                            <a href="view/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
-                            <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                    <?php
+                                <td><img src="upload-images/<?= $image ?>" width="60" height="60" style="object-fit: cover;" />
+                                </td>
+                                <td>
+                                    <a href="user/edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
+                                    <a href="user/action/delete.php?deleteid=<?= $id ?>"
+                                        class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        <?php
                         endwhile;
                     else:
                         ?>
-                    <tr>
-                        <td colspan="6" class="text-center">No records found.</td>
-                    </tr>
+                        <tr>
+                            <td colspan="6" class="text-center">No records found.</td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>

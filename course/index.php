@@ -2,12 +2,13 @@
 session_start();
 
 if (!isset($_SESSION['email'])) {
-    header('Location: ../auth/login.php');
+    header('Location: auth/login.php');
     exit();
 }
 
 require '../config/connect.php';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,11 +31,12 @@ require '../config/connect.php';
                         <a class="nav-link active" aria-current="page" href="../index.php">Student</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Teacher</a>
+                        <a class="nav-link" href="../teacher/index.php">Teacher</a>
                     </li>
 
+
                     <li class="nav-item">
-                        <a class="nav-link" href="../course/index.php">Courses</a>
+                        <a class="nav-link" href="#">Courses</a>
                     </li>
 
                     <li class="nav-item">
@@ -46,14 +48,14 @@ require '../config/connect.php';
     </nav>
 
     <div class="container py-5">
-        <h1 class="text-center fw-bold mb-4">Teacher Information</h1>
+        <h1 class="text-center fw-bold mb-4">Course Information</h1>
 
         <div class="text-end mb-3">
-            <a href="../auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
+            <a href="auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
         </div>
 
         <div class="mb-3">
-            <a href="create.php" class="btn btn-sm btn-success">Add Teacher</a>
+            <a href="create.php" class="btn btn-sm btn-success">Add Course</a>
         </div>
 
         <div class="table-responsive">
@@ -62,26 +64,27 @@ require '../config/connect.php';
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
+                        <th>Duration</th>
                         <th>Action</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT * FROM teachers";
+                    $sql = "SELECT * FROM course";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result && mysqli_num_rows($result) > 0):
                         while ($row = mysqli_fetch_assoc($result)):
                             $id = $row['id'];
                             $name = $row['name'];
-                            $email = $row['email'];
+                            $duration = $row['duration'];
                     ?>
                             <tr>
                                 <td><?= $id ?></td>
                                 <td><?= $name ?></td>
-                                <td><?= $email ?></td>
+                                <td><?= $duration ?></td>
+
                                 </td>
                                 <td>
                                     <!-- <a href="view/edit-course.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a> -->
