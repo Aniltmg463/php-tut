@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $fav_sport = $_POST['fav_sport'];
 
     if (empty($name) || empty($email) || empty($password)) {
         $error = "Please fill in all fields.";
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Email already registered.";
         } else {
             // Insert new teacher
-            $query = "INSERT INTO teachers (name, email, password) VALUES ('$name', '$email', '$password')";
+            $query = "INSERT INTO teachers (name, email, password, fav_sport) VALUES ('$name', '$email', '$password', '$fav_sport')";
             if (mysqli_query($conn, $query)) {
                 header("Location: ../auth/login.php");
                 exit;
@@ -55,6 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="block text-gray-700">Email</label>
                     <input type="email" name="email" placeholder="Email" required class="w-full p-2 border rounded">
                 </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700">Favorite Sport</label>
+                    <input type="text" name="fav_sport" placeholder="Favorite Sport" required
+                        class="w-full p-2 border rounded">
+                </div>
+
                 <div class="mb-4">
                     <label class="block text-gray-700">Password</label>
                     <input type="password" name="password" placeholder="Password" required

@@ -36,6 +36,12 @@
                 </div>
                 <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded">Login</button>
             </form>
+
+            <p class="text-center text-gray-600 mt-2">
+                <a href="reset-password.php" class="text-blue-500 hover:underline">Forgot password?</a>
+            </p>
+
+
             <p class="text-center text-gray-600 mt-4">
                 Don't have an account? <a href="signup.php" class="text-blue-500 hover:underline">Sign up</a>
             </p>
