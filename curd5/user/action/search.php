@@ -4,6 +4,7 @@ require '../../config/connect.php'; // Make sure this sets $connection
 
 // Search logic
 $searchResults = [];
+
 if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
     $keyword = trim($_GET['keyword']);
     $keyword = $conn->real_escape_string($keyword);
@@ -37,6 +38,7 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
 
             <!-- 🔍 Search Bar -->
             <form class="d-flex" role="search" action="search.php" method="GET">
