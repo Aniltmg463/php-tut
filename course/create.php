@@ -26,6 +26,13 @@
                                     <option value="2 Years">2 Years</option>
                                 </select>
                             </div>
+                            <div class="mb-3"><label class="form-label">Price</label><input type="text" name="price"
+                                    class="form-control" required></div>
+
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Upload Image</label>
+                                <input class="form-control" type="file" name="file">
+                            </div>
 
 
                             <div class="text-center"><button type="submit" name="submit"

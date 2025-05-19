@@ -40,7 +40,7 @@ require '../config/connect.php';
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Fees</a>
+                        <a class="nav-link" href="../payment/cart.php">Buy</a>
                     </li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@ require '../config/connect.php';
         <h1 class="text-center fw-bold mb-4">Course Information</h1>
 
         <div class="text-end mb-3">
-            <a href="auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
+            <a href="../auth/logout.php" class="btn btn-sm btn-warning">Log Out</a>
         </div>
 
         <div class="mb-3">
@@ -91,6 +91,8 @@ require '../config/connect.php';
                                     <a href="edit.php?updateid=<?= $id ?>" class="btn btn-sm btn-primary">Update</a>
 
                                     <a href="action/delete.php?deleteid=<?= $id ?>" class="btn btn-sm btn-danger">Delete</a>
+
+                                    <!-- <a href="courses.php" class="btn btn-sm btn-info">Buy</a> -->
                                 </td>
                             </tr>
                         <?php
