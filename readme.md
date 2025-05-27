@@ -53,6 +53,3 @@ student-management/
 
 4. Run the application
 
-# Author
-
-Contact me @ rawbinnn@gmail.com
