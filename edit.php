@@ -79,7 +79,7 @@ if ($_GET['id']) {
 
                             <div class="text-center">
                                 <button type="submit" name="update" class="btn btn-success">Update</button>
-                                <a href="display.php" class="btn btn-secondary">Cancel</a>
+                                <a href="index.php" class="btn btn-secondary">Cancel</a>
                             </div>
                         </form>
 
