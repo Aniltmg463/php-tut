@@ -1,76 +1,92 @@
 <?php
+
+/**
+ * Student Management Application - Entry Point and Router
+ * --------------------------------------------------------
+ * Best Practices Followed:
+ * - Uses `require` to include critical files (halts if missing)
+ * - Validates and sanitizes inputs (e.g., `$_GET`, `$_POST`)
+ * - Uses sessions for secure access and flash messaging
+ * - Implements RESTful routing (POST for store/update/delete)
+ * - Keeps concerns separated using MVC-like folder structure
+ */
+
 session_start();
-require_once 'Users.php';
 
-// Create object
-$user = new Users();
-$result = $user->fetchUsers();
-?>
+// Redirect unauthenticated users to login
+if (!isset($_SESSION['email'])) {
+    header('Location: auth/login.php');
+    exit();
+}
 
-<!doctype html>
-<html lang="en">
+// Load configuration and logic
+require __DIR__ . '/config/database.php';
+require __DIR__ . '/functions/student.php';
 
-<head>
-    <meta charset="utf-8">
-    <title>User List</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+// Sanitize and initialize routing variables
+$action = $_GET['action'] ?? 'list';
+$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
-<body class="bg-light text-dark">
-    <div class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">User List</h2>
-            <a href="insert.php" class="btn btn-primary">Add User</a>
-        </div>
+// Route handling
+switch ($action) {
+    case 'create':
+        require __DIR__ . '/views/create.php';
+        break;
 
-        <?php if (isset($_SESSION['msg'])): ?>
-        <p class="text-success text-center mb-4">
-            <?= $_SESSION['msg'];
-                unset($_SESSION['msg']); ?>
-        </p>
-        <?php endif; ?>
+    case 'store':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require __DIR__ . '/actions/store.php';
+        } else {
+            header("Location: index.php");
+            exit();
+        }
+        break;
 
+    case 'edit':
+        if ($id) {
+            require __DIR__ . '/views/edit.php';
+        } else {
+            $_SESSION['message'] = "Invalid student ID for editing.";
+            header("Location: index.php");
+            exit();
+        }
+        break;
 
-        <div class="card shadow">
-            <div class="card-body">
-                <table class="table table-bordered table-hover text-center align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th colspan="2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (mysqli_num_rows($result) > 0): ?>
-                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td><?= $row['id'] ?></td>
-                            <td><?= $row['name'] ?></td>
-                            <td><?= $row['email'] ?></td>
-                            <td>
-                                <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                            </td>
-                            <td>
-                                <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure you want to delete this user?');">
-                                    Delete
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endwhile; ?>
-                        <?php else: ?>
-                        <tr>
-                            <td colspan="5" class="text-center">No users found</td>
-                        </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</body>
+    case 'update':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id) {
+            require __DIR__ . '/actions/update.php';
+        } else {
+            $_SESSION['message'] = "Invalid request for update.";
+            header("Location: index.php");
+            exit();
+        }
+        break;
 
-</html>
+    case 'delete':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            require __DIR__ . '/actions/delete.php';
+        } else {
+            $_SESSION['message'] = "Invalid request for deletion.";
+            header("Location: index.php");
+            exit();
+        }
+        break;
+
+    case 'view':
+        if ($id) {
+            require __DIR__ . '/views/view.php';
+        } else {
+            $_SESSION['message'] = "Invalid student ID for viewing.";
+            header("Location: index.php");
+            exit();
+        }
+        break;
+
+    case 'list':
+        require __DIR__ . '/views/index.php';
+        break;
+
+    default:
+        echo '<div class="alert alert-danger">Invalid action specified.</div>';
+        break;
+}
