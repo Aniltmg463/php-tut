@@ -1,5 +1,9 @@
 <?php
+require_once __DIR__ . '/../functions/Student.php';
 
+// Initialize Student object and get DB connection
+$studentObj = new Student();
+$connection = $studentObj->getConnection();
 /**
  * Highlights for Students:
  * Use of prepared statements to protect against SQL injection.

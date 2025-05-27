@@ -1,10 +1,21 @@
 <?php
 
-if (!isset($_GET['id'])) {
-    die("ID is required.");
+require_once __DIR__ . '/../functions/Student.php';
+
+$studentObj = new Student();
+
+// Check connection
+$studentObj->isConnected();
+
+// Validate ID
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Valid student ID is required.");
 }
 
-$result = get_student_by_id($connection, $_GET['id']);
+$id = (int) $_GET['id'];
+
+// Get mysqli_result object
+$result = $studentObj->getStudentById($id);
 
 if ($result && $result->num_rows > 0) {
     $student = $result->fetch_assoc();
