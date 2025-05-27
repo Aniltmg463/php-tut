@@ -38,4 +38,13 @@ Edit
 
 -> <a href="index.php?action=create" class="btn btn-secondary">Add student</a>
 
+//for image ti check
+   <?php
+    echo '<pre>';
+    print_r($studentData['image']);
+    echo '</pre>';
+    die;
+    ?>
+
+
 

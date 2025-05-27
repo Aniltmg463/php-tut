@@ -1,69 +1,80 @@
 <?php
 require_once __DIR__ . '/../functions/Student.php';
+session_start();
 
 // Initialize Student object and get DB connection
 $studentObj = new Student();
 $connection = $studentObj->getConnection();
-/**
- * Highlights for Students:
- * Use of prepared statements to protect against SQL injection.
- * Proper HTTP method check using isset($_POST['update_student']).
- * Input sanitization with trim().
- * Integer casting for id to ensure type safety.
- * Flash messaging using sessions.
- * Redirection after processing to avoid form resubmission on refresh.
- */
 
-// Check if the update form was submitted
 if (isset($_POST['update_student'])) {
-    // Get the student ID from the query parameter
     $id = (int) $_GET['id'];
 
-    // Retrieve and sanitize form input values
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
     $course = trim($_POST['course']);
 
-    // Check if file is uploaded
-    $file_name = null;
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === 0) {
-        $file_name = $_FILES['file']['name'];
-        $file_temp = $_FILES['file']['tmp_name'];
+    $existingStudent = $studentObj->getStudentById($id)->fetch_assoc();
+    $existingImage = $existingStudent['image'] ?? null;
 
-        if (move_uploaded_file($file_temp, "../upload-images/" . $file_name)) {
-            echo "<div class='alert alert-success'>File uploaded successfully!</div>";
+    $file_name = $existingImage; // default image path
+    $upload_dir = __DIR__ . 'upload-images/';
+
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === 0) {
+        $original_name = $_FILES['file']['name'];
+        $file_temp = $_FILES['file']['tmp_name'];
+        $ext = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+        if (!in_array($ext, $allowed_extensions)) {
+            $_SESSION['message'] = "Invalid file type.";
+            $_SESSION['message_type'] = "danger";
+            header("Location: index.php?action=edit&id=$id");
+            exit();
+        }
+
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $new_filename = uniqid('student_', true) . '.' . $ext;
+        $destination = $upload_dir . $new_filename;
+        $relative_path = 'upload-images/' . $new_filename;
+
+        if (move_uploaded_file($file_temp, $destination)) {
+            $file_name = $relative_path;
         } else {
-            echo "<div class='alert alert-danger'>File upload failed.</div>";
+            $_SESSION['message'] = "Failed to upload new image.";
+            $_SESSION['message_type'] = "danger";
+            header("Location: index.php?action=edit&id=$id");
+            exit();
         }
     }
 
-    // Prepare the SQL update statement using placeholders to prevent SQL injection
-    $stmt = $connection->prepare("UPDATE students SET name = ?, email = ?, phone = ?, course = ?, image =? WHERE id = ?");
-
+    $stmt = $connection->prepare("UPDATE students SET name = ?, email = ?, phone = ?, course = ?, image = ? WHERE id = ?");
     if ($stmt) {
-        // Bind parameters to the statement (s = string, i = integer)
         $stmt->bind_param("sssssi", $name, $email, $phone, $course, $file_name, $id);
 
-        // Execute the update
         if ($stmt->execute()) {
-            // If successful, set a success message
             $_SESSION['message'] = "Student updated successfully.";
             $_SESSION['message_type'] = "success";
-            header("Location: index.php");
+            header("Location: index.php?action=list");
             exit();
         } else {
-            // If execution fails, show an error message
             $_SESSION['message'] = "Update failed during execution.";
             $_SESSION['message_type'] = "danger";
-            header("Location: ../views/edit.php?id=$id");
+            header("Location: index.php?action=edit&id=$id");
             exit();
         }
     } else {
-        // If preparation of statement fails
-        $_SESSION['message'] = "Failed to prepare the update statement.";
+        $_SESSION['message'] = "Failed to prepare statement.";
         $_SESSION['message_type'] = "danger";
-        header("Location: ../views/edit.php?id=$id");
+        header("Location: index.php?action=edit&id=$id");
         exit();
     }
+} else {
+    $_SESSION['message'] = "Invalid request.";
+    $_SESSION['message_type'] = "danger";
+    header("Location: index.php?action=list");
+    exit();
 }

@@ -28,7 +28,7 @@ include 'views/layouts/header.php';
 
 <div class="container mt-5">
     <h4>Edit Student</h4>
-    <form action="?action=update&id=<?= $student['id'] ?>" method="POST">
+    <form action="?action=update&id=<?= $student['id'] ?>" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label>Student Name</label>
             <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($student['name']) ?>"

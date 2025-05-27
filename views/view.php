@@ -46,8 +46,7 @@ if (!$studentData) {
     </div>
     <div class="mb-3">
         <label>Student Image</label><br>
-        <img src="../upload-images/<?= htmlspecialchars($studentData['image']) ?>" width="60" height="60"
-            style="object-fit: cover;" />
+        <img src="<?= htmlspecialchars($studentData['image']) ?>" width="60" height="60" style="object-fit: cover;" />
     </div>
     <a href="index.php" class="btn btn-secondary">Back</a>
     <!-- <a href="index.php?action=create" class="btn btn-secondary">Add student</a> -->
