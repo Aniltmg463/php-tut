@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 08:22 PM
+-- Generation Time: May 11, 2025 at 05:19 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,37 +18,43 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `oop_mydb`
+-- Database: `student_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `students`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `course` varchar(100) NOT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `students`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`) VALUES
-(18, 'try2', 'try2@try2'),
-(19, 'new old', 'new@new');
+INSERT INTO `students` (`id`, `name`, `email`, `password`, `phone`, `course`, `image`) VALUES
+(1, 'Anil', 'anil@anil', '123', '123', 'bca', NULL),
+(4, 'ramharu', 'asaa@sda', '', '123123', 'bca', NULL),
+(7, 'sam', 'sam@sam', '123', '', '', NULL),
+(13, 'sdasAaaaaaaaa', 'sda@sad', '', '123123', 'bca', NULL);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `users`
+-- Indexes for table `students`
 --
-ALTER TABLE `users`
+ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
@@ -57,10 +63,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `students`
 --
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+ALTER TABLE `students`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
