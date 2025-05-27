@@ -1,0 +1,41 @@
+
+//
+$newId = $stmt->insert_id; // Get ID of the newly inserted student
+$_SESSION['message'] = "Student created successfully.";
+$_SESSION['message_type'] = "success";
+
+// Redirect to the edit page for that student
+header("Location: ../index.php?action=edit&id=" . $newId);
+exit();
+
+
+
+//
+case 'edit':
+    if ($id) {
+        require __DIR__ . '/views/edit.php';
+    } else {
+        $_SESSION['message'] = "Invalid student ID for editing.";
+        header("Location: index.php");
+        exit();
+    }
+    break;
+
+
+//ROuting:
+📍 If create.php is in a different folder (e.g., views/), and your current file is views/view.php, then use:
+php
+Copy
+Edit
+<a href="create.php" class="btn btn-secondary">Back</a>
+or if you are routing through index.php?action=create, use:
+
+php
+Copy
+Edit
+<a href="../index.php?action=create" class="btn btn-secondary">Back</a>
+✅ Choose the correct path based on your file structure and routing logic. If you're using routes like index.php?action=create, then use that format.
+
+-> <a href="index.php?action=create" class="btn btn-secondary">Add student</a>
+
+
