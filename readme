@@ -1,0 +1,53 @@
+Question Set: PHP OOP Practice
+
+1. Class and Method Basics
+   Create a class named Person that includes:
+   A property: name
+   A method: sayHello() that prints "Hello, my name is [name]"
+
+2. Constructor and Method Implementation
+   Create a class named Laptop that includes:
+
+Constructor parameters: brand and model
+
+A method: getDetails() that returns the brand and model of the laptop
+
+3. Inheritance and Method Overriding
+   Create a parent class named Vehicle with:
+
+A method: start() that prints "vehicle"
+
+Then create a child class named Bike that:
+
+Overrides the start() method to print "bike"
+
+4. Extending Parent Class
+   Enhance the Vehicle class by adding one more method of your choice
+   (e.g., stop(), displayInfo(), etc.)
+   Demonstrate how this new method can also be used in the child class Bike.
+
+5. Interface and Polymorphism
+   Define an Animal interface with a method:
+
+makeSound()
+
+Then create two classes Dog and Cat that implement the Animal interface.
+Each class should implement the makeSound() method as follows:
+
+Dog → prints "Bark"
+
+Cat → prints "Meow"
+
+6. Area Calculation Using OOP
+   Create a class Circle with:
+
+Constructor that accepts the radius
+
+A method CalculateArea() that returns the area of the circle using the formula:
+
+# Area
+
+𝜋×𝑟^2
+Area=π×r^2
+
+7. Define an interface Degree with a method convertToFahrenheit(), then create a class Temperature that implements the interface, has a private celsius property, initializes it via constructor, implements the conversion using F = (C × 9/5) + 32, and display the Fahrenheit value by creating an object with 25°C.

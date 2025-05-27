@@ -1,0 +1,116 @@
+Question Set: PHP OOP Practice
+1. Class and Method Basics
+Create a class named Person that includes:
+
+A property: name
+
+A method: sayHello() that prints "Hello, my name is [name]"
+
+2. Constructor and Method Implementation
+Create a class named Laptop that includes:
+
+Constructor parameters: brand and model
+
+A method: getDetails() that returns the brand and model of the laptop
+
+3. Inheritance and Method Overriding
+Create a parent class named Vehicle with:
+
+A method: start() that prints "vehicle"
+
+Then create a child class named Bike that:
+
+Overrides the start() method to print "bike"
+
+4. Extending Parent Class
+Enhance the Vehicle class by adding one more method of your choice
+(e.g., stop(), displayInfo(), etc.)
+Demonstrate how this new method can also be used in the child class Bike.
+
+5. Interface and Polymorphism
+Define an Animal interface with a method:
+
+makeSound()
+
+Then create two classes Dog and Cat that implement the Animal interface.
+Each class should implement the makeSound() method as follows:
+
+Dog → prints "Bark"
+
+Cat → prints "Meow"
+
+6. Area Calculation Using OOP
+Create a class Circle with:
+
+Constructor that accepts the radius
+
+A method CalculateArea() that returns the area of the circle using the formula:
+
+Area
+=
+𝜋
+×
+𝑟
+2
+Area=π×r 
+2
+
+
+
+7)
+use interface Degree,
+create class temperature,
+private variable celcious,
+in method convert celcious into ferheit
+
+
+
+
+
+//
+1)create a person class with a name property and a sayHello()
+method that prints "Hello,my name is[name]"
+
+
+2)create class laptop with constructor parameters is brand  and model and get detail function
+
+parent class vehicle, start method print() print "vechile"
+
+child class bike child class using override method
+
+
+
+3)parent class ma arko function vaneune 
+
+
+4)interface Animal child class two dog and cat,
+method make sound(),
+
+
+in chid class make sound() implementation
+
+such as dog is bark
+cat is meow
+
+
+5)circle=pi r ^2
+
+6)
+abstract class basecontroller
+abstarcat function()
+
+child class abc
+implementataion
+creatae obj
+
+7)
+
+dry principle and solid principle and kiss principle
+
+
+*)
+
+abtsratc and interface ko code layeralaya
+
+
+………………………...
