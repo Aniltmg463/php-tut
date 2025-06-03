@@ -1,52 +1,43 @@
 <?php
-require_once 'config/Database.php';
-require_once 'classes/Job.php';
+session_start();
+require_once 'core/Model.php';
+require_once 'controllers/ItemController.php';
+require_once 'controllers/CategoryController.php';
+require_once 'models/Item.php';
+require_once 'models/Category.php';
 
-$db = new Database();
-$conn = $db->connect();
-// $db = (new Database())->connect(); //in single line
-$job = new Job($conn);
-
-/* echo '<pre>';
-print_r($job);
-echo '</pre>';
-die;
- */
-
-$action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
+$controller = new ItemController;
+$categoryController = new CategoryController; 
+$action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
 switch ($action) {
     case 'create':
-        if ($method === 'POST') {
-            $job->create($_POST['title'], $_POST['company'], $_POST['location']);
-            header("Location: index.php");
-            exit;
-        } else {
-            include 'views/create.php';
-        }
+        $controller->create();
         break;
-
-    case 'edit':
-        if ($method === 'POST') {
-            $job->update($_GET['id'], $_POST['title'], $_POST['company'], $_POST['location']);
-            header("Location: index.php");
-            exit;
-        } else {
-            $jobData = $job->getOne($_GET['id']);
-            $job = $jobData;
-            include 'views/edit.php';
-        }
+    case 'index':
+        $controller->index();
         break;
-
+    case 'update':
+        $controller->update();
+        break;
     case 'delete':
-        $job->delete($_GET['id']);
-        header("Location: index.php");
-        exit;
+        $controller->delete();
         break;
 
+    //Category.
+    case 'categoryIndex':
+        $categoryController->index();
+        break;
+    case 'categoryCreate':
+        $categoryController->categoryCreate();
+        break;
+    case 'categoryUpdate':
+        $categoryController->categoryUpdate();
+        break;
+    case 'categoryDelete':
+        $categoryController->categoryDelete();
+        break;
     default:
-        $jobs = $job->getAll();
-        include 'views/index.php';
+        $controller->index();
         break;
 }
