@@ -1,52 +1,39 @@
 <?php
-require_once 'config/Database.php';
-require_once 'classes/Job.php';
+session_start();
 
-$db = new Database();
-$conn = $db->connect();
-// $db = (new Database())->connect(); //in single line
-$job = new Job($conn);
+//old auth
+if (!isset($_SESSION['email'])) {
+    header('Location: auth/login.php');
+    exit();
+}
 
-/* echo '<pre>';
-print_r($job);
-echo '</pre>';
-die;
- */
+//new auth
+// session_start();
+// if (!isset($_SESSION['user'])) {
+//     header('Location: auth/login.php');
+//     exit();
+// }
 
-$action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
+require_once 'controllers/Post.php';
+$post = new Post();
+
+$action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
 switch ($action) {
     case 'create':
-        if ($method === 'POST') {
-            $job->create($_POST['title'], $_POST['company'], $_POST['location']);
-            header("Location: index.php");
-            exit;
-        } else {
-            include 'views/create.php';
-        }
+        $post =  $post->create();
         break;
 
     case 'edit':
-        if ($method === 'POST') {
-            $job->update($_GET['id'], $_POST['title'], $_POST['company'], $_POST['location']);
-            header("Location: index.php");
-            exit;
-        } else {
-            $jobData = $job->getOne($_GET['id']);
-            $job = $jobData;
-            include 'views/edit.php';
-        }
+        $post->update();
         break;
 
     case 'delete':
-        $job->delete($_GET['id']);
-        header("Location: index.php");
-        exit;
+        $post->delete();
         break;
 
     default:
-        $jobs = $job->getAll();
+        $posts = $post->read();
         include 'views/index.php';
         break;
 }

@@ -2,7 +2,7 @@
 class Database
 {
     private $host = "localhost";
-    private $db_name = "job_portal_crud";
+    private $db_name = "blog_crud";
     private $username = "root";
     private $password = "";
     public $conn;
