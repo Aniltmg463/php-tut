@@ -1,26 +1,19 @@
-<?php
-
+<?php 
+require_once './core/QueryBuilder.php';
 class Model
 {
-    protected $conn;
-
-    protected $host = "localhost";
-    protected $db_name = "blog_crud";
-    protected $username = "root";
-    protected $password = "";
-
+    protected $db;
+    protected $queryBuilder;
     public function __construct()
     {
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
-        if ($this->conn->connect_error) {
-            die("Connection Failed: " . $this->conn->connect_error);
+        $config = require 'config/db.php';
+        $this->db = new mysqli($config['hostname'], $config['username'], $config['password'], $config['database']);
+
+        if ($this->db->connect_error) {
+            die("Connection failed: " . $this->db->connect_error);
         }
-    }
 
-    // You can add common methods for all models here, like error handling, logging, etc.
+        $this->queryBuilder = new QueryBuilder($this->db);
 
-    public function getConnection()
-    {
-        return $this->conn;
     }
 }
